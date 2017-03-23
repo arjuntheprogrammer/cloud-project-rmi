@@ -1,10 +1,11 @@
 
 
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import org.json.simple.JSONObject;
+
+
 
 
 public interface ServerInterface extends Remote{
@@ -12,9 +13,20 @@ public interface ServerInterface extends Remote{
 	
 	public  String print(String str) throws Exception;
 	
-	public boolean fileDownload(ClientInterface clientImpl) throws RemoteException;
+	public byte[] fileDownload() throws RemoteException;
 	
-	public boolean recieveDataOnServer(String filename, byte[] data, int len)throws RemoteException;
+	
+	
+	public boolean recieveDataOnServer(byte[] data) throws RemoteException;
+
+	public void setFileForDownload(String filePathOfServer) throws RemoteException;
+
+	public void closeFileForDownload() throws RemoteException;
+
+	public void setFileForUpload(String filePathOfServer) throws RemoteException;
+
+	public void closeFileForUpload() throws RemoteException;
+
 	
 //	public byte[] downloadFile(String fileName) throws Exception;
 //	public boolean uploadFile(byte[] fileData, String fileName) throws Exception;

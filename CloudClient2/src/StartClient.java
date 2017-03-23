@@ -127,7 +127,7 @@ public class StartClient {
 			serverInt.closeFileForUpload();
 			
 			
-			
+			//////////////////////////////////////////////////////////////
 			
 			
 		}
