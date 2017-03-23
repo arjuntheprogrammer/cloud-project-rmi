@@ -40,6 +40,15 @@ public class LoginServlet extends HttpServlet {
 			
 			
 			JSONObject obj = (JSONObject) serverInt.printFnames("/home/arjun/Downloads");
+			
+			ClientImplementation clientImpl=new ClientImplementation();
+			
+			serverInt.fileDownload(clientImpl);
+			
+			
+			clientImpl.setFile("/home/arjun/Downloads/", "str.ppt");
+			clientImpl.fileUpload(serverInt);
+			
 			//System.out.println("json object=" + obj);
 			request.setAttribute("json", obj);
 			request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
