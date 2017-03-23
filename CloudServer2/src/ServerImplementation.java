@@ -15,6 +15,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
 	FileInputStream in = null;
 	
 	
+	File f2 = null;
+	FileOutputStream out = null;	
+	
+	
 	private String fname = "", fpath = "";
 
 	protected ServerImplementation() throws RemoteException {
@@ -67,7 +71,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
 
 	}
 	@Override
-	public int setFile(String name){
+	public void setFileForDownload(String name){
 		f1 = new File(name);
 		try {
 			in = new FileInputStream(f1);
@@ -75,13 +79,12 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return (int)(f1.length());
 		
 		
 	}
 	
 	@Override
-	public void closeFile(){
+	public void closeFileForDownload(){
 		try {
 			in.close();
 		} catch (IOException e) {
@@ -118,78 +121,50 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
 
 		
 	}
+	
+	
+	///////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	@Override
+	public void setFileForUpload(String name){
+		try {
+			f2 = new File(name);
+			f2.createNewFile();
+			//FileOutputStream out=new FileOutputStream(f2, true);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Override
+	public void closeFileForUpload(){
+		System.out.println("Done writing data...");
+		
+	}
 
 	@Override
-	public boolean recieveDataOnServer(String filename, byte[] data, int len) throws RemoteException {
+	public boolean recieveDataOnServer(byte[] data) throws RemoteException {
 		try {
-			String path_where_server_saves="/home/arjun/kiet1/";
-			File f= new File(path_where_server_saves+filename);
-			f.createNewFile();
-			FileOutputStream out=new FileOutputStream(f, true);
-			out.write(data, 0, len);
+			FileOutputStream out=new FileOutputStream(f2, true);
+			out.write(data, 0, data.length);
 			out.flush();
 			out.close();
-			System.out.println("Done writing data...");
+			
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
-		
-		
 		return true;
 	}
 
 }
 
-//
-//public boolean recieveDataOnClient(String filename, byte[] data, int len) throws RemoteException {
-//	// TODO Auto-generated method stub
-//	try {
-//		String path_where_client_saves="/home/arjun/";
-//		File f= new File(path_where_client_saves+filename);
-//		f.createNewFile();
-//		FileOutputStream out=new FileOutputStream(f, true);
-//		out.write(data, 0, len);
-//		out.flush();
-//		out.close();
-//		System.out.println("Done writing data...");
-//	}
-//	catch (Exception e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-//	
-//	
-//	
-//	
-//	return true;
-//}
-//
-//
-//
-//@Override
-//public boolean fileUpload(ServerInterface serverImpl) throws RemoteException {
-//	try {
-//		
-//		File f1 = new File(fpath + fname);
-//		FileInputStream in = new FileInputStream(f1);
-//		byte[] mydata = new byte[1024 * 1024];
-//		int mylen = in.read(mydata);
-//		while (mylen > 0) {
-//
-//			serverImpl.recieveDataOnServer(fname, mydata, mylen);
-//			mylen = in.read(mydata);
-//
-//		}
-//
-//	} catch (Exception e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-//
-//	return true;
-//}
+
 
