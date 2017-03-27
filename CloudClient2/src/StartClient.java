@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.rmi.Naming;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.swt.SWT;
