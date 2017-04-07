@@ -43,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 			//System.out.println("here");
 			JSONObject obj = (JSONObject) serverInt.printFnames("/home/arjun/Downloads");
 
-
+			/*
 			//////////////////////////////////////////////////////////
 
 			String path_where_client_saves="/home/arjun/Downloads/manali.mp4";
@@ -100,17 +100,9 @@ public class LoginServlet extends HttpServlet {
 
 			//////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-
-
+			*/
 			request.setAttribute("json", obj);
-			request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+			request.getRequestDispatcher("/splitter.jsp").forward(request, response);
 		}
 
 		catch (Exception e) {
