@@ -2,8 +2,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.rmi.Naming;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
+
+
 @WebServlet(urlPatterns = "/login.do")
 public class LoginServlet extends HttpServlet {
 
@@ -20,9 +22,39 @@ public class LoginServlet extends HttpServlet {
 	//private LoginService service = new LoginService();
 	//private TodoService todoService = new TodoService();
 
+	public void download(ServerInterface serverInt, String path_where_client_saves, String filePathOfServer) throws IOException{
+		path_where_client_saves="/home/arjun/a.txt";
+		filePathOfServer = "/media/arjun/46A6A679A6A668DF/Users/arjun gupta/Downloads/a.txt";
+		
+		File f= new File(path_where_client_saves);
+		f.createNewFile();
+		FileOutputStream out=new FileOutputStream(f, true);
+
+
+		serverInt.setFileForDownload(filePathOfServer);
+		byte[] mydata1 = null;
+
+		while((mydata1=serverInt.fileDownload())!=null ){
+			//c+=1024;
+			//mydata=serverInt.fileDownload();
+			out.write(mydata1, 0, mydata1.length);
+		}
+
+
+		serverInt.closeFileForDownload();;
+
+		out.flush();
+		out.close();
+
+
+		System.out.println("file recieved");
+	}
+	
+	
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
+	throws IOException, ServletException {
 
 
 
@@ -41,11 +73,16 @@ public class LoginServlet extends HttpServlet {
 			serverInt = (ServerInterface) Naming.lookup(url);
 
 			//System.out.println("here");
-			JSONObject obj = (JSONObject) serverInt.printFnames("/home/arjun/Downloads");
-
+			String path="/media/arjun/46A6A679A6A668DF/Users/arjun gupta/Downloads/";
+			JSONObject obj = (JSONObject) serverInt.printFnames(path);
+			
+			System.out.println("json="+ obj);
+			
 			/*
 			//////////////////////////////////////////////////////////
-
+			
+			download(ServerInterface serverInt, String path_where_client_saves, String filePathOfServer)
+			
 			String path_where_client_saves="/home/arjun/Downloads/manali.mp4";
 			File f= new File(path_where_client_saves);
 			f.createNewFile();
@@ -111,9 +148,32 @@ public class LoginServlet extends HttpServlet {
 		}
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		String filename=request.getParameter("path");
+		
+		System.out.println(filename);
+		response.setHeader("Content-Type", getServletContext().getMimeType(filename));
+		response.setHeader("Content-Disposition", "attachment;filename=\"" + filename + "\"");
+
+		OutputStream out = response.getOutputStream();
+		String path="/media/arjun/46A6A679A6A668DF/Users/arjun gupta/Downloads/";
+		FileInputStream in = new FileInputStream(path+filename);
+		byte[] buffer = new byte[4096];
+		int length;
+		while ((length = in.read(buffer)) > 0){
+			out.write(buffer, 0, length);
+		}
+		out.close();
+		in.close();
+		out.flush();
+		
+		
+	}
+
+//	@Override
+//	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//			throws IOException, ServletException {}
 	//		String name = request.getParameter("name");
 	//		String password = request.getParameter("password");
 	//

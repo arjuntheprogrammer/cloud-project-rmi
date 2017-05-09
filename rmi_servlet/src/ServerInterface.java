@@ -1,5 +1,8 @@
 
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -8,7 +11,7 @@ import org.json.simple.JSONObject;
 
 
 
-public interface ServerInterface extends Remote{
+public interface ServerInterface  extends Remote {
 	public  JSONObject printFnames(String sDir) throws Exception;
 	
 	public  String print(String str) throws Exception;
@@ -26,6 +29,8 @@ public interface ServerInterface extends Remote{
 	public void setFileForUpload(String filePathOfServer) throws RemoteException;
 
 	public void closeFileForUpload() throws RemoteException;
+	
+	public byte[] readFile(String string, Charset encoding) throws IOException,RemoteException;;
 
 	
 //	public byte[] downloadFile(String fileName) throws Exception;
